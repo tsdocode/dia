@@ -17,7 +17,7 @@ The core generation process involves:
 graph TD
     subgraph Inputs
         A[Text Prompt] --> B(Text Processing)
-        A_Opt[Audio Prompt Path (Optional)] --> C{Load Audio}
+        A_Opt[Audio Prompt Path ?] --> C{Load Audio}
         C --> D[DAC: Audio to Codebook] --> E(Pre-fill Decoder State)
     end
 
@@ -34,7 +34,7 @@ graph TD
     end
 
     subgraph Decoder Logic
-        G_cond -- Logits --> H{Combine Logits (CFG)}
+        G_cond -- Logits --> H{Combine Logits CFG}
         G_uncond -- Logits --> H
         E --> G_cond
         E --> G_uncond
