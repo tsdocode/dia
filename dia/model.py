@@ -100,6 +100,9 @@ class Dia:
         self.model: DiaModel = DiaModel(config, self.compute_dtype)
         self.dac_model = None
 
+        if torch.cuda.is_available():
+            torch.backends.cuda.matmul.allow_tf32 = True
+
     @classmethod
     def from_local(
         cls,
