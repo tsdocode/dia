@@ -293,9 +293,10 @@ class Dia:
         temperature: float,
         top_p: float,
         cfg_filter_top_k: int,
+        current_idx: int,
     ) -> torch.Tensor:
         audio_eos_value = self.config.data.audio_eos_value
-        logits_Bx1xCxV = self.model.decoder.decode_step(tokens_Bx1xC, dec_state)
+        logits_Bx1xCxV = self.model.decoder.decode_step(tokens_Bx1xC, dec_state, current_idx)
 
         logits_last_BxCxV = logits_Bx1xCxV[:, -1]
         uncond_logits_CxV = logits_last_BxCxV[0]
@@ -400,6 +401,7 @@ class Dia:
             self._compiled = True
         dec_state, dec_output = self._prepare_generation(text, audio_prompt, verbose)
         dec_step = dec_output.prefill_step - 1
+        current_idx = torch.tensor([dec_step], device=self.device)
 
         bos_countdown = max_delay_pattern
         eos_detected = False
@@ -422,7 +424,10 @@ class Dia:
                 temperature,
                 top_p,
                 cfg_filter_top_k,
+                current_idx,
             )
+            
+            current_idx += 1
 
             if (not eos_detected and pred_C[0] == audio_eos_value) or dec_step == max_tokens - max_delay_pattern - 1:
                 eos_detected = True
