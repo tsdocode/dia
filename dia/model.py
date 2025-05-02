@@ -49,7 +49,9 @@ def _sample_next_token(
         sorted_indices_to_remove_BCxV[..., 0] = torch.zeros_like(sorted_indices_to_remove_BCxV[..., 0])
 
         indices_to_remove_BCxV = torch.zeros_like(sorted_indices_to_remove_BCxV)
-        indices_to_remove_BCxV = indices_to_remove_BCxV.scatter(dim=-1, index=sorted_indices_BCxV, src=sorted_indices_to_remove_BCxV)
+        indices_to_remove_BCxV = indices_to_remove_BCxV.scatter(
+            dim=-1, index=sorted_indices_BCxV, src=sorted_indices_to_remove_BCxV
+        )
         logits_BCxV = logits_BCxV.masked_fill(indices_to_remove_BCxV, -torch.inf)
 
     final_probs_BCxV = torch.softmax(logits_BCxV, dim=-1)
@@ -302,8 +304,8 @@ class Dia:
         uncond_logits_CxV = logits_last_BxCxV[0]
         cond_logits_CxV = logits_last_BxCxV[1]
         logits_CxV = cond_logits_CxV + cfg_scale * (cond_logits_CxV - uncond_logits_CxV)
-        logits_CxV[:, audio_eos_value + 1:] = torch.full_like(
-            logits_CxV[:, audio_eos_value + 1:],
+        logits_CxV[:, audio_eos_value + 1 :] = torch.full_like(
+            logits_CxV[:, audio_eos_value + 1 :],
             fill_value=-torch.inf,
         )
         logits_CxV[1:, audio_eos_value:] = torch.full_like(
@@ -426,7 +428,7 @@ class Dia:
                 cfg_filter_top_k,
                 current_idx,
             )
-            
+
             current_idx += 1
 
             if (not eos_detected and pred_C[0] == audio_eos_value) or dec_step == max_tokens - max_delay_pattern - 1:

@@ -1,7 +1,8 @@
 from random import choice
-from dia.model import Dia
 
 import torch
+
+from dia.model import Dia
 
 
 torch._inductor.config.coordinate_descent_tuning = True
@@ -34,4 +35,3 @@ for _ in range(2):
 for _ in range(10):
     text = choice(test_cases)
     output = model.generate(text, use_torch_compile=True, verbose=True)
-

@@ -144,7 +144,7 @@ class DecoderInferenceState:
 
         dec_positions = torch.full((2, 1), fill_value=0, dtype=torch.int32, device=device)
         tgt_padding_mask = torch.ones((2, 1), dtype=torch.bool, device=device)
-        
+
         dec_cross_attn_mask = create_attn_mask(tgt_padding_mask, enc_state.padding_mask, device, is_causal=False)
         causal_mask = torch.tril(torch.ones(max_audio_len, max_audio_len, dtype=torch.bool, device=device))
 
