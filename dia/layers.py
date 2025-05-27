@@ -431,8 +431,8 @@ class SelfAttention(nn.Module):
         self.qkv = FusedQKV(
             self.kv_embed_dim,
             (
-                self.num_query_heads * self.head_dim + 
-                2 * (self.num_kv_heads * self.head_dim)
+                self.num_query_heads * self.head_dim
+                + 2 * (self.num_kv_heads * self.head_dim)
             ),
             bias=False,
             num_q_heads=self.num_query_heads,
