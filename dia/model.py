@@ -372,7 +372,12 @@ class Dia:
             encoder_out, enc_state.positions, enc_state.padding_mask
         )
         dec_state = DecoderInferenceState.new(
-            self.config, enc_state, encoder_out, dec_cross_attn_cache, self.compute_dtype, max_generation_length=max_tokens
+            self.config,
+            enc_state,
+            encoder_out,
+            dec_cross_attn_cache,
+            self.compute_dtype,
+            max_generation_length=max_tokens,
         )
         prefill, prefill_steps = self._prepare_audio_prompt(audio_prompts)
 

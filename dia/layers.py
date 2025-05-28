@@ -430,15 +430,12 @@ class SelfAttention(nn.Module):
 
         self.qkv = FusedQKV(
             self.kv_embed_dim,
-            (
-                self.num_query_heads * self.head_dim
-                + 2 * (self.num_kv_heads * self.head_dim)
-            ),
+            (self.num_query_heads * self.head_dim + 2 * (self.num_kv_heads * self.head_dim)),
             bias=False,
             num_q_heads=self.num_query_heads,
             q_head_dim=self.head_dim,
             num_kv_heads=self.num_kv_heads,
-            kv_head_dim=self.head_dim
+            kv_head_dim=self.head_dim,
         )
         self.qkv.linear.weight.data = torch.cat([q_proj_weight, k_proj_weight, v_proj_weight], dim=0)
 
